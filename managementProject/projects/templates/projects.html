@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexPlan</title>
+</head>
+<body>
+    <!-- Display Existing Projects -->
+    <h2>Existing Projects:</h2>
+    <ul>
+        {% for project in projects %}
+            <li>{{ project.Title }}</li>
+            <!-- Display other project details as needed -->
+        {% endfor %}
+    </ul>
+
+    <!-- Display Form to Create New Project -->
+    <h2>Create New Project:</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Renders the form fields -->
+        <button type="submit">Create Project</button>
+    </form>
+
+    <!-- Display Error Message if Any -->
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+</body>
+</html>
