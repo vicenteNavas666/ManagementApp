@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db import models
 from django.core.validators import MinValueValidator
@@ -9,15 +10,18 @@ class Projects(models.Model):
     Title = models.CharField(max_length=20)  
     Description = models.TextField()
     StartDate = models.DateField(default=timezone.now)                                                                      #autoset to current date
-    EndDate = models.DateField(validators=[MinValueValidator(limit_value=models.F('StartDate'))])                           #EndDate must be greater or equal to StartDate
+    EndDate = models.DateField()                           
     Status = models.CharField(max_length=20, default='Pending')  
     Priority = models.CharField(max_length=20,
     choices=[
-        ('PENDING', 'Pending'),
-        ('IN_PROGRESS', 'In Progress'),
-        ('COMPLETED', 'Completed'),
-        ('CANCELLED', 'Cancelled'),
+        ('LOW', 'Low'),
+        ('MEDIUM', 'Medium'),
+        ('HIGH', 'High')
     ])
+
+    def clean(self):
+        if self.EndDate < self.StartDate:                                                                                   #EndDate must be greater or equal to StartDate
+            raise ValidationError("End Date must be greater than or equal to Start Date.")
 
     def __str__(self):                                                                                                      #value to return when casted to str()
         return self.Title
