@@ -5,4 +5,7 @@ export interface task {
     Ongoing: string, 
     startDate: Date, 
     endDate: Date
+    ended: boolean
+    priority: number, 
+    
 }
