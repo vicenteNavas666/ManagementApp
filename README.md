@@ -11,6 +11,11 @@ Commands:
 - django-admin startproject mysite
 - python manage.py runserver
 - python manage.py startapp app
+- python -m pip install django-tailwind
+- python -m pip install 'django-tailwind[reload]'
+- python manage.py tailwind install
+- python manage.py tailwind start
+
 ```
 
 Directory structure:
