@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static tailwind_tags %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexPlan</title>
+    {% tailwind_css %}
+</head>
+<body class="">
+
+<header class='h-36 bg-[#D5BDAF] flex flex-row '>
+    <div class="basis-1/2 flex items-center ml-12 ">
+        <a href="/projects/" class="flex items-center">
+            <img class="h-24 w-24" src="http://cdn.onlinewebfonts.com/svg/img_416526.png" alt=""><p class="font-serif text-6xl">Nex</p><p class="font-sans text-6xl font-bold">Plan</p>
+        </a>
+       
+    </div>
+    <div class="basis-1/2 flex items-center justify-end mr-12 ">
+        <p class="font-sans text-4xl mr-4 ">User</p><img class=" h-16 w-16" src="https://freesvg.org/img/abstract-user-flat-3.png" alt="">
+    </div>
+</header>
+
+<section class="h-max mt-12   mx-12    max-h-32 min-h-32" id="Task">
+   <div id="Task" class="w-full rounded-md bg-zinc-200  text-center items-center  h-max my-4 py-4 border-gray-700 border " >
+    <ul class="  grid grid-cols-6">
+        <li  class=" " >1</li>
+        <li  class=" " >Project Title</li>
+        <li  class="" >Start Date</li>
+        <li  class="  " >End Date</li>
+        <li  class=" " >Status</li>
+        <li  class="  " >Priority</li>
+     
+    </ul>
+   </div>
+
+   <div  class="overflow-y-auto max-h-cardH scrollbar-hide">
+    {% for project in projects %} 
+    <a href="/projects/{{ project.PKProject }}" class="block">
+        <ul class="grid grid-cols-6 h-32 my-6 bg-FormGray rounded-lg text-gray items-center text-center border-gray-700 border" onclick="redirect('/{{project.PKProject}}')">
+            <li>{{ project.Title }}</li>
+            <li>{{ project.Description }}</li>
+            <li>{{ project.StartDate }}</li>
+            <li>{{ project.EndDate }}</li>
+            <li>{{ project.Status }}</li>
+            <li>{{ project.Priority}}</li>
+            <!-- Mostrar otros detalles del proyecto según sea necesario -->
+        </ul>
+    </a>
+        
+    {% endfor %}
+</div>
+
+<div class="  ">
+    <button id="toggleForm" type="button" class="text-white bg-black  font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2">
+        <svg fill="#ffffff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="-6.81 -6.81 59.02 59.02" xml:space="preserve" stroke="#ffffff" stroke-width="0.00045402"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M41.267,18.557H26.832V4.134C26.832,1.851,24.99,0,22.707,0c-2.283,0-4.124,1.851-4.124,4.135v14.432H4.141 c-2.283,0-4.139,1.851-4.138,4.135c-0.001,1.141,0.46,2.187,1.207,2.934c0.748,0.749,1.78,1.222,2.92,1.222h14.453V41.27 c0,1.142,0.453,2.176,1.201,2.922c0.748,0.748,1.777,1.211,2.919,1.211c2.282,0,4.129-1.851,4.129-4.133V26.857h14.435 c2.283,0,4.134-1.867,4.133-4.15C45.399,20.425,43.548,18.557,41.267,18.557z"></path> </g> </g></svg>
+        <span class="sr-only">Icon description</span>
+    </button>
+</div>
+
+</section>
+
+
+
+            <section class="hidden h-max " id="Form">
+        <div class="  my-12  flex  justify-center " >
+            <form method="post" class="my-12   w-1/3 p-10 rounded-lg">
+                <div class="">
+                    {% csrf_token %}
+                    {{form.Title}}
+                    {{form.Description}}
+                    {{form.StartDate}}
+                    {{form.EndDate}}
+                    {{form.Status}}
+                    {{form.Priority}}
+            
+                </div>
+               
+                
+                <button type="submit" class="bg-black  text-white rounded-md w-full py-6">Create Project</button>
+            </form>
+        </div>
+   
+    
+
+    
+    <!-- Display Error Message if Any -->
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    <div class=" mx-12 ">
+        <button id="taskButton" type="button" class="text-white bg-black  font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2">
+            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M11 6L21 6.00072M11 12L21 12.0007M11 18L21 18.0007M3 11.9444L4.53846 13.5L8 10M3 5.94444L4.53846 7.5L8 4M4.5 18H4.51M5 18C5 18.2761 4.77614 18.5 4.5 18.5C4.22386 18.5 4 18.2761 4 18C4 17.7239 4.22386 17.5 4.5 17.5C4.77614 17.5 5 17.7239 5 18Z" stroke="#f2f2f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+        </button>
+    </div>
+    
+
+
+</section>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleFormButton = document.getElementById("toggleForm");
+        const formSection = document.getElementById("Form");
+        const overflowSection = document.getElementById("Task");
+
+        toggleFormButton.addEventListener("click", function() {
+            formSection.classList.toggle("hidden");
+            overflowSection.classList.toggle("hidden");
+        });
+
+        const createProjectButton = document.getElementById("createProjectButton");
+        createProjectButton.addEventListener("click", function() {
+            document.getElementById("projectForm").submit();
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function(){ 
+         const toggleListButton = document.getElementById("taskButton");
+         const listsection = document.getElementById("Task"); 
+         const FormSection = document.getElementById("Form");
+
+    toggleListButton.addEventListener("click" ,function(){ 
+        listsection.classList.toggle("hidden");
+        FormSection.classList.toggle("hidden");
+
+    });
+
+
+
+
+    });
+</script>
+
+
+</body>
+</html>

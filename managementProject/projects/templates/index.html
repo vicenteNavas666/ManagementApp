@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static tailwind_tags %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% tailwind_css %}
+</head>
+<body>
+    
+    <div class="h-screen flex flex-col items-center justify-center">
+
+        <h1>You're at the main page</h1>
+        <button type="button" class="bg-black text-white rounded-md w-32 h-12 mt-2">
+            <a href="/projects">Go to projects!</a>
+        </button>
+
+    </div>
+</body>
+</html>

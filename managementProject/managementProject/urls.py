@@ -15,12 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-#from django.urls import include, path
-from django.urls import path
+from django.urls import include, path
 from projects import views
 
 urlpatterns = [
     path("", views.index),
-    path("projects", views.projects),
-    path("projects/project/<int:order>", views.project)
+    path('projects/', views.projects, name='projects'),
+    path('projects/<int:project_id>/', views.project, name='project'),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static tailwind_tags %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexPlan</title>
+    {% tailwind_css %}
+    <style>
+
+        #formContainer {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #hiddenForm {
+            display: none; /* Hide the form initially */
+            flex-direction: column;
+            align-items: center;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.css">
+</head>
+<body>
+
+    <header class='h-36 flex flex-row bg-[#D5BDAF]'>
+        <div class="basis-1/2 flex items-center ml-4 ">
+            <p class="font-sans text-6xl">{{ project.Title }}</p>
+        </div>
+        <div class="basis-1/2 flex items-center justify-end mr-4">
+            <p class="font-sans text-4xl mr-4">User</p><img class="h-16 w-16" src="https://freesvg.org/img/abstract-user-flat-3.png" alt="">
+        </div>
+    </header>
+    
+    <div class="h-32 flex justify-end items-center mr-4">
+
+        <button id="toggleForm" class="text-white bg-black  font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2">
+            <svg fill="#ffffff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="-6.81 -6.81 59.02 59.02" xml:space="preserve" stroke="#ffffff" stroke-width="0.00045402"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M41.267,18.557H26.832V4.134C26.832,1.851,24.99,0,22.707,0c-2.283,0-4.124,1.851-4.124,4.135v14.432H4.141 c-2.283,0-4.139,1.851-4.138,4.135c-0.001,1.141,0.46,2.187,1.207,2.934c0.748,0.749,1.78,1.222,2.92,1.222h14.453V41.27 c0,1.142,0.453,2.176,1.201,2.922c0.748,0.748,1.777,1.211,2.919,1.211c2.282,0,4.129-1.851,4.129-4.133V26.857h14.435 c2.283,0,4.134-1.867,4.133-4.15C45.399,20.425,43.548,18.557,41.267,18.557z"></path> </g> </g></svg>
+        </button>
+          
+    </div>
+
+{% if tasks %}
+
+    <div id="gantt"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // tasks from Django
+        dbTasks = '{{tasks|escapejs|safe}}'
+        
+        // remove single quotes
+        var noQuotes = dbTasks.replace(/'/g, '');
+
+        // Add double quotes around keys
+        quotesKey = noQuotes.replace(/([{,]\s*)([a-zA-Z0-9_]+)(\s*:)/g, '$1"$2"$3');
+
+        // Add double quotes around keys and values
+        var quotesAll = quotesKey.replace(/:(\s*[^,}\]]+\s*)/g, ':"$1"');
+
+        // remove spaces
+        var noSpaces = quotesAll.replace(/\s/g, '');
+
+        // convert to JSON
+        var jsonObject = JSON.parse(noSpaces);
+        
+        // Convert JSON to gantt format
+        var tasksGantt = []
+        jsonObject.forEach(element => {
+            tasksGantt.push(
+                {
+                    'id': parseInt(element.id),
+                    'name': element.name,
+                    'start': element.start,
+                    'end': element.end
+                }
+            )
+        });
+        
+        
+        var gantt = new Gantt("#gantt", tasksGantt, {});
+    });
+
+    
+    </script>
+{% endif %}
+
+<div id="formContainer">
+    <form method="POST" id="hiddenForm">
+        {% csrf_token %}
+        {{ form.as_div }}  <!-- Renders the form fields -->
+        <button class="bg-black text-white rounded-md w-32 h-12 mt-2" type="submit">Create Task</button>
+    </form>
+</div>
+
+
+<script>
+
+    var hiddenForm = document.getElementById('hiddenForm')
+
+    // Select all <div> elements inside the form
+    var divsInsideForm = hiddenForm.querySelectorAll('div');
+
+    // Now you can iterate over the selected <div> elements
+    divsInsideForm.forEach(function(div) {
+        // Set the display property to 'flex' for each <div>
+        div.style.display = 'flex';
+        // Set the flex-direction to 'column' for each <div>
+        div.style.flexDirection = 'column';
+        div.style.alignItems = 'center'; // Center items horizontally
+    });
+    document.getElementById('toggleForm').addEventListener('click', function() {
+    // Toggle the form's visibility directly
+    hiddenForm.style.display = hiddenForm.style.display === 'flex' ? 'none' : 'flex';
+});
+
+
+
+</script>
+
+</body>
+</html>
