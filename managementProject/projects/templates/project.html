@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static tailwind_tags %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexPlan</title>
+    {% tailwind_css %}
+    <style>
+        .LOW { background-color: green; }
+        .MEDIUM { background-color: blue; }
+        .HIGH { background-color: red; }
+
+        #formContainer {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #hiddenForm {
+            display: none; /* Hide the form initially */
+            flex-direction: column;
+            align-items: center;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.css">
+</head>
+<body>
+
+    <header class='h-36 flex flex-row {{ project.Priority }}'>
+        <div class="basis-1/2 flex items-center ml-4 ">
+            <p class="font-sans text-6xl">{{ project.Title }}</p>
+        </div>
+        <div class="basis-1/2 flex items-center justify-end mr-4">
+            <p class="font-sans text-4xl">User</p><img class="h-24 w-24" src="https://freesvg.org/img/abstract-user-flat-3.png" alt="">
+        </div>
+    </header>
+    
+    <div class="h-32 flex justify-end items-center mr-4">
+
+        <button id="toggleForm" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full flex items-center justify-center">
+            +
+        </button>
+          
+    </div>
+
+{% if tasks %}
+
+    <div id="gantt"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // tasks from Django
+        dbTasks = '{{tasks|escapejs|safe}}'
+        
+        // remove single quotes
+        var noQuotes = dbTasks.replace(/'/g, '');
+
+        // Add double quotes around keys
+        quotesKey = noQuotes.replace(/([{,]\s*)([a-zA-Z0-9_]+)(\s*:)/g, '$1"$2"$3');
+
+        // Add double quotes around keys and values
+        var quotesAll = quotesKey.replace(/:(\s*[^,}\]]+\s*)/g, ':"$1"');
+
+        // remove spaces
+        var noSpaces = quotesAll.replace(/\s/g, '');
+
+        // convert to JSON
+        var jsonObject = JSON.parse(noSpaces);
+        
+        // Convert JSON to gantt format
+        var tasksGantt = []
+        jsonObject.forEach(element => {
+            tasksGantt.push(
+                {
+                    'id': parseInt(element.id),
+                    'name': element.name,
+                    'start': element.start,
+                    'end': element.end
+                }
+            )
+        });
+        
+        
+        var gantt = new Gantt("#gantt", tasksGantt, {});
+    });
+
+    
+    </script>
+{% endif %}
+
+<div id="formContainer">
+    <form method="POST" id="hiddenForm">
+        {% csrf_token %}
+        {{ form.as_div }}  <!-- Renders the form fields -->
+        <button type="submit">Create Task</button>
+    </form>
+</div>
+
+
+<script>
+
+    var hiddenForm = document.getElementById('hiddenForm')
+
+    // Select all <div> elements inside the form
+    var divsInsideForm = hiddenForm.querySelectorAll('div');
+
+    // Now you can iterate over the selected <div> elements
+    divsInsideForm.forEach(function(div) {
+        // Set the display property to 'flex' for each <div>
+        div.style.display = 'flex';
+        // Set the flex-direction to 'column' for each <div>
+        div.style.flexDirection = 'column';
+        div.style.alignItems = 'center'; // Center items horizontally
+    });
+    document.getElementById('toggleForm').addEventListener('click', function() {
+    // Toggle the form's visibility directly
+    hiddenForm.style.display = hiddenForm.style.display === 'flex' ? 'none' : 'flex';
+});
+
+
+
+</script>
+
+</body>
+</html>
