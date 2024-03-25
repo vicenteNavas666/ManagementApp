@@ -21,5 +21,6 @@ from projects import views
 urlpatterns = [
     path("", views.index),
     path('projects/', views.projects, name='projects'),
+    path('projects/<int:project_id>/', views.project, name='project'),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
