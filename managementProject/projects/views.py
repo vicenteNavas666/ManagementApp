@@ -6,7 +6,7 @@ from .models import Projects, Tasks
 
 
 def index(request):
-    return HttpResponse('You are at the main page.')
+    return render(request, 'index.html')
 
 def projects(request):
 

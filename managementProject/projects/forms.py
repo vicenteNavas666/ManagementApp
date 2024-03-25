@@ -4,14 +4,14 @@ from .models import Projects, Tasks
 class ProjectForm(forms.ModelForm):
     Title = forms.CharField(
         widget=forms.TextInput(attrs={
-            'class': 'block w-full bg-FormGray text-white h-12 rounded-md my-1',
+            'class': 'block w-full bg-FormGray h-12 rounded-md my-1',
             'placeholder': 'Title'
         })
     )
 
     Description = forms.CharField(
         widget=forms.Textarea(attrs={
-            'class': 'w-full text-white bg-FormGray h-full my-1 rounded-md',
+            'class': 'w-full ì bg-FormGray h-full my-1 rounded-md',
             'rows': '5',
             'placeholder': 'Description'
         })
@@ -19,7 +19,7 @@ class ProjectForm(forms.ModelForm):
 
     StartDate = forms.DateField(
         widget=forms.DateInput(attrs={
-            'class': 'w-full bg-FormGray text-white h-12 rounded-md my-1',
+            'class': 'w-full bg-FormGray  h-12 rounded-md my-1',
             'placeholder': 'Start Date',
             'type': 'date'  # Asegura que el tipo de entrada sea 'date' para compatibilidad con HTML5
         })
@@ -27,7 +27,7 @@ class ProjectForm(forms.ModelForm):
 
     EndDate = forms.DateField(
         widget=forms.DateInput(attrs={
-            'class': 'w-full bg-FormGray text-white h-12 rounded-md my-1',
+            'class': 'w-full bg-FormGray h-12 rounded-md my-1',
             'placeholder': 'End Date',
             'type': 'date'
         })
@@ -35,7 +35,7 @@ class ProjectForm(forms.ModelForm):
 
     Status = forms.CharField(
         widget=forms.TextInput(attrs={
-            'class': 'w-full bg-FormGray text-white h-12 rounded-md my-1',
+            'class': 'w-full bg-FormGray  h-12 rounded-md my-1',
             'placeholder': 'Status'
         })
     )
@@ -47,7 +47,7 @@ class ProjectForm(forms.ModelForm):
             ('HIGH', 'High')
         ],
         widget=forms.Select(attrs={
-            'class': 'w-full bg-FormGray text-white h-12 rounded-md my-1',
+            'class': 'w-full bg-FormGray h-12 rounded-md my-1',
             'placeholder': 'Priority'
         })
     )
@@ -66,6 +66,36 @@ class ProjectForm(forms.ModelForm):
                 raise forms.ValidationError("End Date must be greater than or equal to Start Date.")
 
 class TaskForm(forms.ModelForm):
+    Title = forms.CharField(
+    widget=forms.TextInput(attrs={
+        'class': 'block w-full bg-FormGray h-12 rounded-md my-1',
+        'placeholder': 'Title'
+    })
+    )
+
+    Description = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'w-full ì bg-FormGray h-full my-1 rounded-md',
+            'rows': '5',
+            'placeholder': 'Description'
+        })
+    )
+
+    StartDate = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'w-full bg-FormGray  h-12 rounded-md my-1',
+            'placeholder': 'Start Date',
+            'type': 'date'  # Asegura que el tipo de entrada sea 'date' para compatibilidad con HTML5
+        })
+    )
+
+    EndDate = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'w-full bg-FormGray h-12 rounded-md my-1',
+            'placeholder': 'End Date',
+            'type': 'date'
+        })
+    )
     class Meta:
         model = Tasks
         fields = ['Title', 'Description', 'StartDate', 'EndDate']

@@ -36,7 +36,8 @@
 
    <div  class="overflow-y-auto max-h-cardH scrollbar-hide">
     {% for project in projects %} 
-        <ul class="grid grid-cols-6 h-32 my-6 bg-FormGray rounded-lg text-gray items-center text-center border-gray-700 border">
+    <a href="/projects/{{ project.PKProject }}" class="block">
+        <ul class="grid grid-cols-6 h-32 my-6 bg-FormGray rounded-lg text-gray items-center text-center border-gray-700 border" onclick="redirect('/{{project.PKProject}}')">
             <li>{{ project.Title }}</li>
             <li>{{ project.Description }}</li>
             <li>{{ project.StartDate }}</li>
@@ -45,6 +46,8 @@
             <li>{{ project.Priority}}</li>
             <!-- Mostrar otros detalles del proyecto según sea necesario -->
         </ul>
+    </a>
+        
     {% endfor %}
 </div>
 
@@ -61,7 +64,7 @@
 
             <section class="hidden h-max " id="Form">
         <div class="  my-12  flex  justify-center " >
-            <form method="post" class="my-12   w-1/3 p-10 bg-back rounded-lg">
+            <form method="post" class="my-12   w-1/3 p-10 rounded-lg">
                 <div class="">
                     {% csrf_token %}
                     {{form.Title}}
